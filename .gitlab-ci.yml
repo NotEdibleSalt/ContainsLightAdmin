@@ -1,0 +1,13 @@
+image: node:14.19.1-alpine
+
+stages: # 分段
+  - deploy
+
+job_deploy:
+    image: docker
+    stage: deploy
+    script:
+      - docker build -t contains-light-admin .
+      - if [ $(docker ps -aq --filter name=ContainsLightAdmin) ]; then docker rm -f ContainsLightAdmin;fi
+      - docker run -d -p 8081:80 --name ContainsLightAdmin contains-light-admin
+
