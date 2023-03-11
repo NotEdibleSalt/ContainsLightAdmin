@@ -24,7 +24,10 @@
 <script setup lang="ts">
 import { computed, reactive, defineExpose, ref, defineProps } from "vue";
 import type { FormInstance } from "ant-design-vue";
-import { saveArticleTypeAndIntroductionApi } from "@/api/article";
+import {
+  publishArticleApi,
+  saveArticleTypeAndIntroductionApi,
+} from "@/api/article";
 import { dictDataUtil } from "@/utils/DictUtil";
 import { putSubmit } from "@/utils/FormUtil";
 
@@ -47,15 +50,10 @@ const articleTypeOptions = computed(() => {
 });
 
 const formRef = ref<FormInstance>();
-const updateDict = () =>
-  putSubmit(
-    formRef.value,
-    saveArticleTypeAndIntroductionApi,
-    props.articleId,
-    formState.data
-  );
+const publishArticle = () =>
+  putSubmit(formRef.value, publishArticleApi, props.articleId, formState.data);
 const save = () => {
-  return updateDict();
+  return publishArticle();
 };
 
 defineExpose({ save });

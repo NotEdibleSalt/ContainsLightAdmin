@@ -76,7 +76,7 @@
           mode="multiple"
           placeholder="请选择角色"
           option-label-prop="label"
-          :options="rolesOptions"
+          :options="rolesOptions.values"
         >
         </a-select>
       </a-form-item>
@@ -129,7 +129,7 @@ const genderOptions = computed(() => {
   return dictDataUtil("Sex");
 });
 
-let rolesOptions: any[] = reactive({ data: [] }).data;
+let rolesOptions = reactive([]);
 let show = ref<boolean>(false);
 onMounted(() => {
   if (props && props.adminUserid) {
@@ -141,12 +141,12 @@ onMounted(() => {
   }
 
   getAllRolesApi().then((res) => {
-    res.forEach((item: any) => {
-      rolesOptions.push({
+    rolesOptions.values = res.map((item: any) => {
+      return {
         id: item.id,
         lable: item.name,
         value: item.name,
-      });
+      };
     });
   });
 });

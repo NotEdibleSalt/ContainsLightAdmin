@@ -1,5 +1,5 @@
 import { Params, FetchConfig, AppObj, AppHeaders, HttpMsg } from "./type";
-import { getStore } from "@/utils/storage";
+import { getStorage } from "@/utils/storage";
 import { message } from "ant-design-vue";
 import router from "@/router";
 
@@ -44,7 +44,7 @@ class Fetch {
     const { BASE_URL, baseHeaders } = this.config;
     headers = headers || {};
     headers = Object.assign({}, headers, baseHeaders);
-    headers.token = getStore("token");
+    headers.token = getStorage("token");
     const result = new Promise((resolve, reject) => {
       url = BASE_URL ? `${BASE_URL}${url}` : url;
 

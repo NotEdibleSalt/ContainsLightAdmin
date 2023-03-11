@@ -6,7 +6,7 @@ const baseUrl = "/menus";
 /**
  * 分页查询菜单参数类型
  */
-export interface GetMenusParamI extends PagingParamI, AppObj {
+export interface GetMenusParamI extends IPagingParam, AppObj {
   parentId?: string;
 
   name?: string;
@@ -87,10 +87,3 @@ export const updateMenuApi = (
  */
 export const delMenuApi = (id: string): Promise<any> =>
   fetch.deleteById(baseUrl, id);
-
-/**
- * 查询菜单树
- *
- * @returns
- */
-export const getMenuTreeApi = (): Promise<any> => fetch.get(baseUrl + "/tree");

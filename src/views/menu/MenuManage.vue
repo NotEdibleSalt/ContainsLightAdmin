@@ -15,7 +15,7 @@
             v-model:expandedKeys="expandedKeys"
             v-model:checkedKeys="checkedKeys"
             :checkable="false"
-            :tree-data="treeData.value"
+            :tree-data="treeData"
             :show-line="showLine"
             :defaultExpandAll="true"
             :autoExpandParent="true"
@@ -50,13 +50,13 @@
             <a-form-item
               label="菜单类型"
               placeholder="请选择菜单类型"
-              name="type"
+              name="menuType"
               :rules="[{ required: true, message: '请选择菜单类型' }]"
             >
               <a-select
                 :disabled="true"
                 :allowClear="true"
-                v-model:value="formState.data.type"
+                v-model:value="formState.data.menuType"
                 :options="menuTypeOptions"
               />
             </a-form-item>
@@ -64,13 +64,16 @@
             <a-form-item
               label="上级菜单"
               name="parentId"
-              v-if="formState.data.type !== 'TopMenu'"
+              v-if="
+                !formState.data.menuType ||
+                formState.data.menuType !== 'TopMenu'
+              "
             >
               <a-tree-select
                 v-model:value="formState.data.parentId"
                 placeholder="请选择上级菜单"
                 :tree-line="true"
-                :tree-data="treeData.value"
+                :tree-data="treeData"
               >
                 <template #title="{ title }">
                   {{ title }}
@@ -180,22 +183,18 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive, onBeforeMount, watch } from "vue";
-import { TreeProps } from "ant-design-vue";
+import { message, TreeProps } from "ant-design-vue";
 import Menu from "./Menu.vue";
-import {
-  getMenuByIdApi,
-  getMenuTreeApi,
-  updateMenuApi,
-  delMenuApi,
-} from "@/api/menu";
+import { getMenuByIdApi, updateMenuApi, delMenuApi } from "@/api/menu";
 import { dictDataUtil } from "@/utils/DictUtil";
 import type { FormInstance } from "ant-design-vue";
+import { getMenuTreeApi } from "@/api/admin-user";
 
 const formState = reactive({
   data: {
     id: "",
     parentId: "",
-    type: "",
+    menuType: "",
     name: "",
     path: "",
     routeName: "",
@@ -215,44 +214,44 @@ const menuTypeOptions = computed(() => {
 
 const formRef = ref<FormInstance>();
 
-const treeData: TreeProps["treeData"] = reactive([]);
+const treeData: TreeProps["treeData"] = reactive({ data: [] }).data;
 const expandedKeys = ref<string[]>([]);
 const checkedKeys = ref<string[]>([]);
 const showLine = ref<boolean>(true);
 
 const searchValue = ref<string>("");
 watch(searchValue, (value) => {
+  const keys = searchExpandKeys(value, treeData);
+  expandedKeys.value.push(...keys);
+});
+
+const searchExpandKeys = (
+  value: string,
+  treeData: TreeProps["treeData"]
+): string[] => {
+  const keys: string[] = [];
   if (value && treeData) {
-    expandedKeys.value = [];
-
-    for (const item of treeData.value) {
+    for (const item of treeData) {
       if (item.title.includes(value)) {
-        expandedKeys.value.push(item.key);
+        const key = item.key as string;
+        keys.push(key);
       }
-
       if (item.children) {
-        for (const item1 of item.children) {
-          if (item1.title.includes(value)) {
-            expandedKeys.value.push(item1.key);
-          }
-
-          if (item1.children) {
-            for (const item2 of item1.children) {
-              if (item2.title.includes(value)) {
-                expandedKeys.value.push(item2.key);
-              }
-            }
-          }
-        }
+        const childrenKeys = searchExpandKeys(value, item.children);
+        keys.push(...childrenKeys);
       }
     }
   }
-});
+  return keys;
+};
 
 const clickTreeNode = (selectedKeys: string[]) => {
-  getMenuByIdApi(selectedKeys[0]).then((res) => {
-    formState.data = res;
-  });
+  const menuId = selectedKeys.pop();
+  if (menuId) {
+    getMenuByIdApi(menuId).then((res) => {
+      formState.data = res;
+    });
+  }
 };
 
 /**
@@ -280,6 +279,7 @@ const handleOk = () => {
       visible.value = false;
       confirmLoading.value = false;
       getTreeData();
+      message.success("保存成功", 3);
     })
     .catch(() => {
       visible.value = true;
@@ -289,7 +289,8 @@ const handleOk = () => {
 
 const getTreeData = () => {
   getMenuTreeApi().then((res) => {
-    treeData.value = res;
+    treeData.length = 0;
+    treeData.push(...res);
   });
 };
 

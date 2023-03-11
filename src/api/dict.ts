@@ -41,7 +41,7 @@ export const getDictItemsApi = (type: string): Promise<IDictItem[]> => {
 /**
  * 分页查询字典参数类型
  */
-export interface GetDictsParamI extends PagingParamI, AppObj {
+export interface GetDictsParamI extends IPagingParam, AppObj {
   name?: string;
   type?: string;
 }

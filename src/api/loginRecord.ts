@@ -6,7 +6,7 @@ const baseUrl = "/loginRecords";
 /**
  * 分页查询登录记录参数类型
  */
-export interface GetLoginRecordsParamI extends PagingParamI, AppObj {
+export interface GetLoginRecordsParamI extends IPagingParam, AppObj {
   loginStatus?: string;
 
   loginAccount?: string;

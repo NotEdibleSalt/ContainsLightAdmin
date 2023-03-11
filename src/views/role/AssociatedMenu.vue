@@ -17,7 +17,7 @@
 import { ref, reactive, onBeforeMount, defineProps, defineExpose } from "vue";
 import { saveRoleAssociatedMenusApi, getRoleAllMenusApi } from "@/api/role";
 import { TreeProps } from "ant-design-vue";
-import { getMenuTreeApi } from "@/api/menu";
+import { getMenuTreeApi } from "@/api/admin-user";
 
 const props = defineProps({
   roleId: {

@@ -92,7 +92,7 @@ import {
   getAuthorityAllModuleApi,
 } from "@/api/authority";
 import { dictDataUtil } from "@/utils/DictUtil";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const formState = reactive({ name: "", module: "", method: "" });
 const columns = [

@@ -4,7 +4,7 @@ import { AppObj } from "@/utils/http/type";
 /**
  * 分页查询文章参数类型
  */
-export interface GetArticlesParamI extends PagingParamI, AppObj {
+export interface GetArticlesParamI extends IPagingParam, AppObj {
   author?: string;
   articleType?: string;
   articleStatus?: string;
@@ -58,8 +58,10 @@ export const updateArticleApi = (
  * @param articleId 文章id
  * @returns
  */
-export const publishArticleApi = (articleId: string): Promise<any> =>
-  fetch.putAction("/articles", articleId, "publish");
+export const publishArticleApi = (
+  articleId: string,
+  data?: any
+): Promise<any> => fetch.putAction("/articles", articleId, "publish", data);
 
 /**
  * 下架文章
@@ -76,22 +78,3 @@ export const lowerShelfArticleApi = (articleId: string): Promise<any> =>
  */
 export const delArticleApi = (articleId: string): Promise<any> =>
   fetch.deleteById("/articles", articleId);
-
-/**
- * 保存文章类型和简介参数
- */
-export interface SaveArticleTypeAndIntroductionParamI extends AppObj {
-  articleType: string;
-  introduction?: string;
-}
-
-/**
- * 保存文章类型和简介
- * @param articleId 文章id
- * @param params
- * @returns
- */
-export const saveArticleTypeAndIntroductionApi = (
-  articleId: string,
-  params: SaveArticleTypeAndIntroductionParamI
-): Promise<any> => fetch.patch("/articles", articleId, params);

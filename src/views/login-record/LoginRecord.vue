@@ -39,7 +39,7 @@
       <a-table
         :bordered="true"
         :columns="columns"
-        :data-source="dataSource.value"
+        :data-source="dataSource"
         :pagination="pagination"
         @change="handleTableChange"
       >
@@ -59,9 +59,8 @@ import type { TableProps } from "ant-design-vue";
 import Page from "@/components/page/Page.vue";
 import dayjs from "dayjs";
 import { dictDataLableUtil, dictDataUtil } from "@/utils/DictUtil";
-
 import { GetLoginRecordsParamI, getLoginRecordsApi } from "@/api/loginRecord";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const ranges = {
   今天: [dayjs(), dayjs()],
@@ -82,7 +81,7 @@ const columns = [
   { dataIndex: "loginStatus", title: "登录状态", align: "center" },
 ];
 
-let dataSource = reactive([]);
+let dataSource = reactive({ data: [] }).data;
 let current = ref(defaultPageParam.current);
 let pageSize = ref(defaultPageParam.pageSize);
 let total = ref(defaultPageParam.total);
@@ -111,7 +110,6 @@ const query = (resetPag = false) => {
       .join(",");
   }
 
-  console.log(formState.data.loginTime);
   let getDictsParam: GetLoginRecordsParamI = {
     loginAccount: formState.data.loginAccount,
     loginStatus: formState.data.loginStatus,
@@ -120,8 +118,9 @@ const query = (resetPag = false) => {
     pageNumber: current.value,
   };
 
-  getLoginRecordsApi(getDictsParam).then((res) => {
-    dataSource.value = res.list;
+  getLoginRecordsApi(getDictsParam).then((res: any) => {
+    dataSource.length = 0;
+    dataSource.push(...res.list);
     total.value = res.total;
   });
 };

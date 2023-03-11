@@ -9,12 +9,12 @@
     >
       <a-form-item
         label="菜单类型"
-        name="type"
+        name="menuType"
         :rules="[{ required: true, message: '请选择菜单类型' }]"
       >
         <a-select
           :allowClear="true"
-          v-model:value="formState.data.type"
+          v-model:value="formState.data.menuType"
           :options="menuTypeOptions"
         />
       </a-form-item>
@@ -22,12 +22,12 @@
       <a-form-item
         label="上级菜单"
         name="parentId"
-        v-if="formState.data.type !== 'TopMenu'"
+        v-if="formState.data.menuType !== 'TopMenu'"
       >
         <a-tree-select
           v-model:value="formState.data.parentId"
           :tree-line="true"
-          :tree-data="treeData.value"
+          :tree-data="treeData"
         >
           <template #title="{ title }">
             {{ title }}
@@ -99,12 +99,13 @@ import { computed, defineExpose, onBeforeMount, reactive, ref } from "vue";
 import type { FormInstance, TreeProps } from "ant-design-vue";
 import { dictDataUtil } from "@/utils/DictUtil";
 import { submit } from "@/utils/FormUtil";
-import { addMenuApi, getMenuTreeApi } from "@/api/menu";
+import { addMenuApi } from "@/api/menu";
+import { getMenuTreeApi } from "@/api/admin-user";
 
 const formState = reactive({
   data: {
     parentId: "",
-    type: "",
+    menuType: "",
     name: "",
     path: "",
     routeName: "",
@@ -129,10 +130,10 @@ const save = () => {
   return saveMenus();
 };
 
-const treeData: TreeProps["treeData"] = reactive([]);
+const treeData: TreeProps["treeData"] = reactive({ data: [] }).data;
 onBeforeMount(() => {
   getMenuTreeApi().then((res) => {
-    treeData.value = res;
+    treeData.push(...res);
   });
 });
 

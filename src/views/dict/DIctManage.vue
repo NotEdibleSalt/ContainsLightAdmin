@@ -95,7 +95,7 @@ import Page from "@/components/page/Page.vue";
 import Dict from "./Dict.vue";
 import DictItemManage from "./item/DictItemManage.vue";
 import { getDictsApi, GetDictsParamI, delDictApi } from "@/api/dict";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const formState = reactive({ name: "", type: "" });
 const columns = [

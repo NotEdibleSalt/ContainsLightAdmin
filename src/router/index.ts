@@ -1,4 +1,4 @@
-import { haveMenu } from "@/utils/authUtil";
+import { haveMenu } from "@/utils/MenuUtil";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
 const routes: Array<RouteRecordRaw> = [
@@ -81,6 +81,14 @@ const routes: Array<RouteRecordRaw> = [
               name: "文章管理",
             },
           },
+          {
+            path: "/loginRecords",
+            name: "LoginRecord",
+            component: () => import("@/views/login-record/LoginRecord.vue"),
+            meta: {
+              name: "登录记录",
+            },
+          },
         ],
       },
     ],
@@ -109,14 +117,15 @@ const router = createRouter({
   routes,
 });
 
-
 router.beforeEach(async (to) => {
-
   if (to.path === "/login" || to.path === "/" || to.path === "/home") {
     return true;
   }
+  if (to.path.includes("articles")) {
+    return true;
+  }
 
-  return await haveMenu(to)
+  return await haveMenu(to);
 });
 
 export default router;

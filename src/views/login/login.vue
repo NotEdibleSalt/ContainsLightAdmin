@@ -50,7 +50,8 @@ import SlidePuzzleVerification from "@/components/verify/SlidePuzzleVerification
 import { defineComponent, reactive, ref } from "vue";
 import router from "@/router";
 import { login } from "@/api/login";
-import { setStore } from "@/utils/storage";
+import { setStorage } from "@/utils/storage";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
   components: { SlidePuzzleVerification },
@@ -70,14 +71,15 @@ export default defineComponent({
     };
 
     // 是否开启滑动验证
-    let enableSlideVerify = false;
+    let enableSlideVerify = true;
     const slidePuzzleVerification = () => {
       if (enableSlideVerify) {
         verify.value.openModel();
       } else {
         login(formState.data.username, formState.data.password).then(
           (result: any) => {
-            setStore("token", result);
+            message.success("登录成功", 3);
+            setStorage("token", result);
             router.push("/");
           }
         );
@@ -91,7 +93,8 @@ export default defineComponent({
       if (res) {
         login(formState.data.username, formState.data.password).then(
           (result: any) => {
-            setStore("token", result);
+            message.success("登录成功", 3);
+            setStorage("token", result);
             router.push("/");
           }
         );

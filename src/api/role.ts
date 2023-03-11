@@ -6,7 +6,7 @@ const baseUrl = "/roles";
 /**
  * 分页查询角色参数类型
  */
-export interface GetRolesParamI extends PagingParamI, AppObj {
+export interface GetRolesParamI extends IPagingParam, AppObj {
   name?: string;
 
   description?: string;

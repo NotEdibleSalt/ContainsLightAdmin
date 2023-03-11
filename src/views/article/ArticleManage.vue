@@ -126,7 +126,7 @@ import {
   lowerShelfArticleApi,
   delArticleApi,
 } from "@/api/article";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const formState = reactive({ author: "", articleType: "", articleStatus: "" });
 const columns = [
@@ -172,7 +172,10 @@ const query = (resetPag = false) => {
 };
 
 const publishArticle = (record: any) => {
-  publishArticleApi(record.id).then(() => {
+  publishArticleApi(record.id, {
+    articleType: record.articleType,
+    introduction: record.introduction,
+  }).then(() => {
     query();
   });
 };

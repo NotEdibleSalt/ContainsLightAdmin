@@ -27,14 +27,14 @@ interface MenuInfo {
 }
 import { defineComponent } from "vue";
 import router from "@/router";
-import { removeAllStore } from "@/utils/storage";
+import { removeAllStorage } from "@/utils/storage";
 export default defineComponent({
   setup() {
     const onClick = ({ key }: MenuInfo) => {
       if (key === "1") {
         router.push("/home");
       } else {
-        removeAllStore();
+        removeAllStorage();
         router.push("/login");
       }
     };

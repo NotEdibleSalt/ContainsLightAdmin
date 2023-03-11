@@ -6,7 +6,7 @@ const baseUrl = "/authoritys";
 /**
  * 分页查询系统权限参数类型
  */
-export interface GetAuthoritysParamI extends PagingParamI, AppObj {
+export interface GetAuthoritysParamI extends IPagingParam, AppObj {
   name?: string;
   url?: string;
   description?: string;

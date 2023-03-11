@@ -4,7 +4,7 @@ import { AppObj } from "@/utils/http/type";
 /**
  * 分页查询后台管理用户参数
  */
-export interface GetAdminUsersParamI extends PagingParamI, AppObj {
+export interface GetAdminUsersParamI extends IPagingParam, AppObj {
   name?: string;
   nickname?: string;
   phone?: string;
@@ -66,3 +66,11 @@ export const delAdminUsersApi = (id: string): Promise<any> =>
  */
 export const getUserAllMenusApi = (): Promise<any> =>
   fetch.get("/admins/menus");
+
+/**
+ * 查询菜单树
+ *
+ * @returns
+ */
+export const getMenuTreeApi = (): Promise<any> =>
+  fetch.get("/admins/menus/tree");

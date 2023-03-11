@@ -110,7 +110,7 @@ import {
   delAdminUsersApi,
 } from "@/api/admin-user";
 import { disableAccountApi, enableAccountApi } from "@/api/account";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const formState = reactive({ name: "", username: "", phone: "" });
 const columns = [

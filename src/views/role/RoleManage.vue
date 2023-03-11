@@ -153,7 +153,7 @@ import {
   enableRoleApi,
 } from "@/api/role";
 import { dictDataUtil } from "@/utils/DictUtil";
-import { defaultPageParam } from "@/types/gConfig";
+import { defaultPageParam } from "@/types/global_config";
 
 const formState = reactive({
   data: { name: "", status: "" },
